@@ -50,11 +50,11 @@ Place the bam file and index file that you want to display with igv-webapp in th
 
 ## accessing igv-webapp
 
-Open http://<host IP address>:<port number set in package.json> in your web browser.
+Open http://<&lt;host IP address&gt;:&lt;port number set in package.json&gt; in your web browser.
 
 To add a track, select the URL ... from Tracks menu and input belows.
 
-* http://<host IP address>:<port number set in httpd.conf>/<bam file placed in htdocs directory>
-* http://<host IP address>:<port number set in httpd.conf>/<index ifle placed in htdocs directory>
+* http://<&lt;host IP address&gt;:<&lt;port number set in httpd.conf&gt;/<&lt;bam file placed in htdocs directory&gt;
+* http://<&lt;host IP address&gt;:<&lt;port number set in httpd.conf&gt;/<&lt;index ifle placed in htdocs directory&gt;
 
 
