@@ -17,7 +17,7 @@ if [ ! -e ${CONTAINER_HOME}/logs ]; then
 fi
 
 if [ ! -e ${CONTAINER_HOME}/${IMAGE} ]; then
-    if [ -e /lustre7/software/experimental/igv-webapp/${IMAGE} ]
+    if [ -e /lustre7/software/experimental/igv-webapp/${IMAGE} ]; then
         cp /lustre7/software/experimental/igv-webapp/${IMAGE} ./
         cp /lustre7/software/experimental/igv-webapp/sample_file/* htdocs/
     fi
