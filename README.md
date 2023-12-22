@@ -1,13 +1,12 @@
 # apptainer-apache2-igvwebapp
-igv-webappとapache2を実行するapptainer instanceを起動するためのファイル一式です。
-apptainer imageはapptainer buildコマンドでローカルで ubuntu-20.04-apache-2.4-igvwebapp-1.13.def から生成するか、遺伝研スパコンで実行する場合はスパコン上のファイルをコピーして使用します。
+A set of files for starting an apptainer instance that runs igv-webapp and apache2. Generate the apptainer image locally from ubuntu-20.04-apache-2.4-igvwebapp-1.13.def using the apptainer build command, or copy the file on the NIG supercomputer to run it on the NIG supercomputer.
 
-## imageのbuild
+## build of image file
 
     $ sudo apptainer build ubuntu-20.04-apache-2.4-igv-webapp-1.13.sif ubuntu-20.04-apache-2.4-webapp-1.13.def
 
 
-## 初期設定
+## settings
 ### httpd.conf
 
     ServerRoot "/usr/local/apache2"
@@ -16,8 +15,7 @@ apptainer imageはapptainer buildコマンドでローカルで ubuntu-20.04-apa
     User user1
     Group group1
 
-user1を自分のアカウント名、group1を自分のグループ名、38080をapache2が使用するポート番号に修正します。
-netstatコマンドで38080が未使用なら変更不要です。
+Change user1 to your account name, group1 to your group name, and 38030 to the port number used by apache2. If you check with the netstat command that port 38080 is not in use, no changes are necessary.
 
 ### package.json
 
@@ -32,24 +30,31 @@ netstatコマンドで38080が未使用なら変更不要です。
         "start": "npx http-server -p 38081 dist",
         "build": "node scripts/updateVersion.js && node scripts/clean.js && rollup -c && node scripts/copyArtifacts.js"
 
-38081をigv-webappが使用するポート番号に修正します。
-netstatコマンドで38081が未使用なら変更不要です。
+Change 38081 to the port number used by igv-webapp.
+If you check with the netstat command that port 38081 is not in use, no changes are necessary.
 
-## apptainer instanceの起動
+
+## start of apptainer instance
 
     $ bash start_container.sh
 
-遺伝研スパコン上の場合、初回実行時に /lustre7/software/experimental/igv-webapp/ubuntu-20.04-apache-2.4-igv-webapp-1.13.sif からイメージファイルがコピーされます。遺伝研スパコン上でない場合は実行前にイメージファイルをビルドしておいてください。
-また、cgi-bin, htdocs, logsディレクトリが作成されます。
-遺伝研スパコン上で実行した場合は htdocs ディレクトリにサンプルのbamファイルとインデックスファイルもコピーされます。
-htdocs ディレクトリに、igv-webappで表示したいbamファイルとインデックスファイルを配置してください。
+On the NIG supercomputer, an image file is copied form /lustre7/software/experimental/igv-webapp/ubuntu-20.04-apache-2.4-igv-webapp-1.13.sif at the first execution.
 
-## igv-webappへのアクセス
+If you are not on a NIG supercomputer, please build the image file before execution.
 
-ウェブブラウザで http://<ホストのIPアドレス>:<package.jsonに設定したポート番号> にアクセスしてください。
-トラックの追加は、TracksメニューからURLを選び、
+Additionally, cgi-bin, htdocs, and logs directories are created.
 
-* http://<ホストのIDアドレス>:<httpd.confに設定したポート番号>/<htdocsに配置したbamファイル>
-* http://<ホストのIDアドレス>:<httpd.confに設定したポート番号>/<htdocsに配置したインデックスファイル>
+When executed on the NIG supercomputer, the sample bam file and index file are also copied to the htdocs directory.
 
-を開いてください。
+Place the bam file and index file that you want to display with igv-webapp in the htdocs directory.
+
+## accessing igv-webapp
+
+Open http://<host IP address>:<port number set in package.json> in your web browser.
+
+To add a track, select the URL ... from Tracks menu and input belows.
+
+* http://<host IP address>:<port number set in httpd.conf>/<bam file placed in htdocs directory>
+* http://<host IP address>:<port number set in httpd.conf>/<index ifle placed in htdocs directory>
+
+
